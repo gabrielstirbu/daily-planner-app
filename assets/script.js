@@ -1,49 +1,75 @@
-// Creating the live date on the page using dayjs
-function displayCurrentDay() {
-    var currentDayElement = $("#currentDay");
-    var currentDate = dayjs().format("dddd, MMMM D");
-    currentDayElement.text("Today is " + currentDate);
-}
-// Call the function in order to be displayed on the page
-displayCurrentDay();
+$(document).ready(function () {
+    // Function to display current day
+    function displayCurrentDay() {
+        // Get the current date
+        var currentDay = dayjs().format("dddd, MMMM D");
+        // Update the content of the element with ID "currentDay"
+        $("#currentDay").text(currentDay);
+    }
+    //Call function
+    displayCurrentDay();
+    // Function to create timeblocks
+    function createTimeblocks() {
+        // Get the container element with class "container"
+        var container = $(".container");
+        // Get the current hour using Day.js
+        var currentHour = dayjs().hour();
 
-// Function to color the event considering the time
-function colorCodeTimeblocks() {
-    var currentHour = dayjs().hour();
+        // Loop through hours from 9AM to 5 PM
+        for (var hour = 9; hour <= 17; hour++) {
+            // Create a new timeblock element with class "row time-block" (Used Bootstrap as an example)
+            var timeblock = $("<div>").addClass("row time-block");
+            // Create an element to display the hour md-1 - Boostrap format
+            var hourDiv = $("<div>").addClass("hour col-md-1").text(formatHour(hour));
+            // Create a textarea element for the description div
+            var descriptionDiv = $("<textarea>").addClass("description col-md-10");
 
-    $(".time-block").each(function () {
-        var blockHour = parseInt($(this).attr("data-hour"));
+            // Color timeblocks 
+            if (hour < currentHour) {
+                descriptionDiv.addClass("past");
+            } else if (hour === currentHour) {
+                descriptionDiv.addClass("present");
+            } else {
+                descriptionDiv.addClass("future");
+            }
 
-        if (blockHour < currentHour) {
-            $(this).find(".description").addClass("past");
-        } else if (blockHour === currentHour) {
-            $(this).find(".description").addClass("present");
-        } else {
-            $(this).find(".description").addClass("future");
+            // Create a save button element and addind the Font Awesome icon props
+            var saveBtn = $("<button>")
+                .addClass("saveBtn col-md-1")
+                .html('<i class="fas fa-save"></i>');
+
+            // Get event from local storage and display it
+            var savedEvent = localStorage.getItem(formatHour(hour));
+            if (savedEvent) {
+                descriptionDiv.val(savedEvent);
+            }
+
+            // Save button click event
+            saveBtn.on("click", function () {
+                // Get the event text from the sibling textarea
+                var eventText = $(this).siblings(".description").val();
+                // Get the hour associated with the timeblock
+                var eventHour = $(this).parent().attr("data-hour");
+                // Save the event text to local storage with the hour as the key
+                localStorage.setItem(eventHour, eventText);
+            });
+
+            // Set the data-hour attribute of the timeblock for reference
+            timeblock.attr("data-hour", formatHour(hour));
+            // Append elements to the timeblock
+            timeblock.append(hourDiv, descriptionDiv, saveBtn);
+
+            // Append the timeblock to the container
+            container.append(timeblock);
         }
-    });
-}
-// Call the function in order to be displayed on the page
-colorCodeTimeblocks();
+    }
+    // Call function
+    createTimeblocks();
 
-// Function to load events from local storage
-function loadEvents() {
-    $(".time-block").each(function () {
-        var blockHour = $(this).attr("data-hour");
-        var savedEvent = localStorage.getItem(blockHour);
+    // Function to format the hour for display
+    function formatHour(hour) {
+        // Format the hour using Day.js to display in "h AM/PM" format
+        return dayjs().hour(hour).format("h A");
+    }
 
-        if (savedEvent) {
-            $(this).find(".description").val(savedEvent);
-        }
-    });
-}
-
-// Function to save events to local storage
-$(".saveBtn").on("click", function () {
-    var hour = $(this).closest(".time-block").attr("data-hour");
-    var eventText = $(this).closest(".time-block").find(".description").val();
-
-    localStorage.setItem(hour, eventText);
 });
-
-loadEvents();
