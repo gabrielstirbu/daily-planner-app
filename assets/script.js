@@ -25,3 +25,25 @@ function colorCodeTimeblocks() {
 }
 // Call the function in order to be displayed on the page
 colorCodeTimeblocks();
+
+// Function to load events from local storage
+function loadEvents() {
+    $(".time-block").each(function () {
+        var blockHour = $(this).attr("data-hour");
+        var savedEvent = localStorage.getItem(blockHour);
+
+        if (savedEvent) {
+            $(this).find(".description").val(savedEvent);
+        }
+    });
+}
+
+// Function to save events to local storage
+$(".saveBtn").on("click", function () {
+    var hour = $(this).closest(".time-block").attr("data-hour");
+    var eventText = $(this).closest(".time-block").find(".description").val();
+
+    localStorage.setItem(hour, eventText);
+});
+
+loadEvents();
