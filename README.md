@@ -10,6 +10,12 @@ Color-code each timeblock based on past, present, and future when the timeblock 
 Allow a user to enter an event when they click a timeblock.
 Save the event in local storage when the save button is clicked in that timeblock.
 Persist events between refreshes of a page.
+![Screenshot 2023-11-14 at 21 45 53](https://github.com/gabrielstirbu/daily-planner-app/assets/145403373/57c27802-2a73-45db-b8f8-23bc5560dedd)
+![Screenshot 2023-11-14 at 21 46 09](https://github.com/gabrielstirbu/daily-planner-app/assets/145403373/282d2dce-25ad-4d23-87a3-477e01070c70)
+![Screenshot 2023-11-14 at 21 46 50](https://github.com/gabrielstirbu/daily-planner-app/assets/145403373/5e80a475-6f7a-4928-8a35-5de393173663)
+![Screenshot 2023-11-14 at 21 47 33](https://github.com/gabrielstirbu/daily-planner-app/assets/145403373/5efb208b-80dc-402f-9d57-8748fa55ea24)
+
+
 
 ## How to Use 
 1. Type and event descripton.
